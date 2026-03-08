@@ -20,16 +20,19 @@ export default function ProductCard({ product }) {
     : null;
 
   return (
-    <div className="product-card group relative bg-white shadow-card hover:shadow-medium transition-shadow duration-300">
+    <div className="relative transition-shadow duration-300 bg-white product-card group shadow-card hover:shadow-medium">
       {/* Image Container */}
       <div className="relative overflow-hidden aspect-[3/4] bg-sand-100">
         <Link to={`/products/${product.id}`}>
           <img
-            src={product.images[0]}
-            alt={product.name}
-            className="product-card-image w-full h-full object-cover"
-            loading="lazy"
-          />
+  src={product.images[0]}
+  alt={product.name}
+  className="object-cover w-full h-full product-card-image"
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = 'https://images.unsplash.com/photo-1558171813-5e3d4e0c64ae?w=600&q=80';
+  }}
+/>
         </Link>
 
         {/* Badges */}
@@ -51,7 +54,7 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Hover Actions */}
-        <div className="absolute top-3 right-3 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <div className="absolute flex flex-col gap-2 transition-opacity duration-300 opacity-0 top-3 right-3 group-hover:opacity-100">
           <button
             onClick={() => setIsWished(!isWished)}
             className={`w-9 h-9 flex items-center justify-center bg-white shadow-soft transition-colors duration-200 ${isWished ? 'text-blush-500' : 'text-charcoal-700 hover:text-blush-500'}`}
@@ -61,7 +64,7 @@ export default function ProductCard({ product }) {
           </button>
           <Link
             to={`/products/${product.id}`}
-            className="w-9 h-9 flex items-center justify-center bg-white shadow-soft text-charcoal-700 hover:text-blush-500 transition-colors duration-200"
+            className="flex items-center justify-center transition-colors duration-200 bg-white w-9 h-9 shadow-soft text-charcoal-700 hover:text-blush-500"
             aria-label="Quick view"
           >
             <Eye size={16} />
@@ -69,7 +72,7 @@ export default function ProductCard({ product }) {
         </div>
 
         {/* Quick Add — slides up on hover */}
-        <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+        <div className="absolute bottom-0 left-0 right-0 transition-transform duration-300 translate-y-full group-hover:translate-y-0">
           <button
             onClick={handleAddToCart}
             className={`w-full py-3 font-body text-sm font-medium tracking-wide flex items-center justify-center gap-2 transition-colors duration-200 ${
@@ -85,8 +88,8 @@ export default function ProductCard({ product }) {
       {/* Info */}
       <div className="p-4">
         <Link to={`/products/${product.id}`}>
-          <p className="font-body text-xs text-blush-500 tracking-widest uppercase mb-1">{product.category}</p>
-          <h3 className="font-display text-base font-semibold text-charcoal-800 hover:text-blush-500 transition-colors duration-200 line-clamp-1">
+          <p className="mb-1 text-xs tracking-widest uppercase font-body text-blush-500">{product.category}</p>
+          <h3 className="text-base font-semibold transition-colors duration-200 font-display text-charcoal-800 hover:text-blush-500 line-clamp-1">
             {product.name}
           </h3>
         </Link>
@@ -98,7 +101,7 @@ export default function ProductCard({ product }) {
               <span key={s} className={`text-xs ${s <= Math.round(product.rating) ? 'text-amber-400' : 'text-sand-300'}`}>★</span>
             ))}
           </div>
-          <span className="font-body text-xs text-charcoal-700/50">({product.reviews})</span>
+          <span className="text-xs font-body text-charcoal-700/50">({product.reviews})</span>
         </div>
 
         {/* Colors */}
@@ -112,15 +115,15 @@ export default function ProductCard({ product }) {
             />
           ))}
           {product.colors.length > 4 && (
-            <span className="font-body text-xs text-charcoal-700/50">+{product.colors.length - 4}</span>
+            <span className="text-xs font-body text-charcoal-700/50">+{product.colors.length - 4}</span>
           )}
         </div>
 
         {/* Price */}
         <div className="flex items-center gap-2">
-          <span className="font-body font-semibold text-charcoal-800">₦{product.price.toLocaleString('en-NG')}</span>
+          <span className="font-semibold font-body text-charcoal-800">₦{product.price.toLocaleString('en-NG')}</span>
           {product.originalPrice && (
-            <span className="font-body text-sm text-charcoal-700/40 line-through">₦{product.originalPrice.toLocaleString('en-NG')}</span>
+            <span className="text-sm line-through font-body text-charcoal-700/40">₦{product.originalPrice.toLocaleString('en-NG')}</span>
           )}
         </div>
       </div>
