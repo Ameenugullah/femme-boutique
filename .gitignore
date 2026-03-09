@@ -4,3 +4,4 @@ dist/
 .env.local
 .DS_Storenode_modules/
 .vercel
+.env
