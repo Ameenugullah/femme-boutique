@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { CartProvider } from './context/CartContext';
 import { AdminProvider } from './context/AdminContext';
+import { OrderProvider } from './context/OrderContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -53,12 +54,14 @@ export default function App() {
   return (
     <BrowserRouter>
       <AdminProvider>
-        <CartProvider>
-          <Routes>
-            <Route path="/admin/*" element={<AdminDashboard />} />
-            <Route path="/*" element={<StoreLayout />} />
-          </Routes>
-        </CartProvider>
+        <OrderProvider>
+          <CartProvider>
+            <Routes>
+              <Route path="/admin/*" element={<AdminDashboard />} />
+              <Route path="/*" element={<StoreLayout />} />
+            </Routes>
+          </CartProvider>
+        </OrderProvider>
       </AdminProvider>
     </BrowserRouter>
   );

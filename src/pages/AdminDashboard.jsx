@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { useAdmin } from '../context/AdminContext';
+import { useOrder } from '../context/OrderContext';
 import { useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Package, PlusCircle, LogOut, Eye, Trash2,
   TrendingUp, DollarSign, Save, X, AlertCircle,
-  Edit3, RefreshCw, ChevronDown, Lock
+  Edit3, RefreshCw, ChevronDown, Lock, ShoppingCart
 } from 'lucide-react';
 import { categories } from '../data/products';
+import NotificationBell from '../components/NotificationBell';
+import Orders from './Orders';
 
-const TABS = ['Overview', 'Products', 'Add Product'];
+const TABS = ['Overview', 'Products', 'Add Product', 'Orders'];
 
 const emptyForm = {
   name: '', category: 'Gowns', price: '', originalPrice: '',
@@ -18,6 +21,7 @@ const emptyForm = {
 
 export default function AdminDashboard() {
   const { isAdminLoggedIn, login, logout, loginError, allProducts, addProduct, deleteProduct, updateStock, getStock } = useAdmin();
+  const { getUnreadCount } = useOrder();
   const navigate = useNavigate();
   const [tab, setTab] = useState('Overview');
   const [loginForm, setLoginForm] = useState({ email: '', password: '' });
@@ -139,15 +143,25 @@ export default function AdminDashboard() {
         <nav className="flex-1 p-4 space-y-1">
           {TABS.map(t => (
             <button key={t} onClick={() => setTab(t)}
-              className={`w-full flex items-center gap-3 px-4 py-3 text-left font-body text-sm transition-all duration-200 ${tab === t ? 'bg-blush-500/20 text-blush-300 border-l-2 border-blush-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>
+              className={`w-full flex items-center gap-3 px-4 py-3 text-left font-body text-sm transition-all duration-200 relative ${tab === t ? 'bg-blush-500/20 text-blush-300 border-l-2 border-blush-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}>
               {t === 'Overview' && <LayoutDashboard size={16} />}
               {t === 'Products' && <Package size={16} />}
               {t === 'Add Product' && <PlusCircle size={16} />}
+              {t === 'Orders' && <ShoppingCart size={16} />}
               {t}
+              {t === 'Orders' && getUnreadCount() > 0 && (
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-xs font-bold bg-blush-500 rounded-full flex items-center justify-center text-white">
+                  {getUnreadCount() > 9 ? '9+' : getUnreadCount()}
+                </span>
+              )}
             </button>
           ))}
         </nav>
         <div className="p-4 space-y-1 border-t border-white/10">
+          <div className="flex items-center justify-between px-4 py-3 text-sm text-white/50">
+            <span className="font-body">Notifications</span>
+            <NotificationBell />
+          </div>
           <button onClick={() => navigate('/')}
             className="flex items-center w-full gap-3 px-4 py-3 text-sm transition-all text-white/50 hover:text-white hover:bg-white/5 font-body">
             <Eye size={16} /> View Store
@@ -162,11 +176,14 @@ export default function AdminDashboard() {
       {/* Top bar — mobile */}
       <div className="fixed top-0 left-0 right-0 z-40 flex items-center justify-between px-4 py-3 md:hidden bg-charcoal-900">
         <span className="text-2xl font-script text-cream-50">NuraBahar</span>
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-center">
           {TABS.map(t => (
             <button key={t} onClick={() => setTab(t)}
-              className={`font-body text-xs px-3 py-1.5 transition-all rounded ${tab === t ? 'bg-blush-500 text-white' : 'text-white/60'}`}>
-              {t === 'Overview' ? '📊' : t === 'Products' ? '📦' : '➕'}
+              className={`font-body text-xs px-3 py-1.5 transition-all rounded relative ${tab === t ? 'bg-blush-500 text-white' : 'text-white/60'}`}>
+              {t === 'Overview' ? '📊' : t === 'Products' ? '📦' : t === 'Add Product' ? '➕' : '📋'}
+              {t === 'Orders' && getUnreadCount() > 0 && (
+                <span className="absolute top-0 right-0 w-4 h-4 text-xs bg-blush-500 rounded-full flex items-center justify-center">•</span>
+              )}
             </button>
           ))}
           <button onClick={() => { logout(); navigate('/'); }} className="px-2 ml-1 text-white/50">
@@ -179,6 +196,10 @@ export default function AdminDashboard() {
       <main className="flex-1 p-4 pt-16 md:ml-60 md:pt-0 md:p-8">
 
         {/* ── OVERVIEW TAB ── */}
+        {tab === 'Orders' && (
+          <Orders />
+        )}
+
         {tab === 'Overview' && (
           <div>
             <div className="pt-2 mb-8">
