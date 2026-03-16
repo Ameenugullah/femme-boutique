@@ -3,14 +3,13 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-  "dev": "vite",
-  "build": "vite build",
-  "lint": "eslint .",
-  "preview": "vite preview",
-  "start": "node server.js" 
+"scripts": {
+"dev": "vite",
+"build": "vite build",
+"start": "node server.js",
+"railway-build": "npm install && npm run build"
 },
-  "dependencies": {
+"dependencies": {
     "express": "^5.2.1",
     "framer-motion": "^11.0.0",
     "lucide-react": "^0.263.1",
