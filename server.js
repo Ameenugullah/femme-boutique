@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'dist')));
 // 6. THE CATCH-ALL ROUTE
 // If someone types in a URL like /about, this tells the browser 
 // to let the React Router handle it instead of crashing.
-app.get('*', (req, res) => {
+app.get('(.*)', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
