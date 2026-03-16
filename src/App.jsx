@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { CartProvider } from './context/CartContext';
 import { AdminProvider } from './context/AdminContext';
-import { OrderProvider } from './context/OrderContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -15,15 +14,13 @@ import AdminDashboard from './pages/AdminDashboard';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [pathname]);
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, [pathname]);
   return null;
 }
 
 function StoreLayout() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
         <ScrollToTop />
@@ -35,10 +32,10 @@ function StoreLayout() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="*" element={
-            <div className="flex items-center justify-center min-h-screen pt-20">
-              <div className="px-6 text-center">
-                <h1 className="mb-4 font-light font-display text-8xl text-charcoal-800">404</h1>
-                <p className="mb-8 text-lg font-body text-charcoal-700/60">This page doesn't exist.</p>
+            <div className="min-h-screen flex items-center justify-center pt-20">
+              <div className="text-center">
+                <h1 className="font-display text-6xl text-charcoal-800 mb-4">404</h1>
+                <p className="font-body text-charcoal-700/60 mb-8">Page not found</p>
                 <a href="/" className="btn-primary">Go Home</a>
               </div>
             </div>
@@ -54,14 +51,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <AdminProvider>
-        <OrderProvider>
-          <CartProvider>
-            <Routes>
-              <Route path="/admin/*" element={<AdminDashboard />} />
-              <Route path="/*" element={<StoreLayout />} />
-            </Routes>
-          </CartProvider>
-        </OrderProvider>
+        <CartProvider>
+          <Routes>
+            <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/*" element={<StoreLayout />} />
+          </Routes>
+        </CartProvider>
       </AdminProvider>
     </BrowserRouter>
   );

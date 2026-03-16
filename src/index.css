@@ -36,6 +36,9 @@
   .section-heading {
     @apply font-display text-3xl md:text-4xl text-charcoal-800;
   }
+  .font-script {
+    font-family: 'Great Vibes', cursive;
+  }
   .tag {
     @apply text-xs font-body font-medium tracking-widest uppercase text-blush-500;
   }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, ShoppingBag, Heart, Truck, RotateCcw, Shield, Plus, Minus, Star } from 'lucide-react';
-import { products } from '../data/products';
+import { useAdmin } from '../context/AdminContext';
 import { reviews as reviewsData, defaultReviews } from '../data/reviews';
 import { useCart } from '../context/CartContext';
 import ReviewCard from '../components/ReviewCard';
@@ -35,7 +35,8 @@ const colorSwatches = {
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const product = products.find(p => p.id === Number(id));
+  const { allProducts } = useAdmin();
+  const product = allProducts.find(p => p.id === Number(id));
   const { addToCart } = useCart();
 
   const [imgIdx, setImgIdx] = useState(0);
@@ -59,7 +60,7 @@ export default function ProductDetail() {
 
   const productReviews = reviewsData[product.id] || defaultReviews;
   const avgRating = productReviews.reduce((s, r) => s + r.rating, 0) / productReviews.length;
-  const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const related = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   const handleAddToCart = () => {
     let valid = true;
@@ -153,10 +154,10 @@ export default function ProductDetail() {
 
             {/* Price */}
             <div className="flex items-center gap-3 mb-6">
-              <span className="font-display text-3xl font-semibold text-charcoal-800">₦{product.price.toLocaleString("en-NG")}</span>
+              <span className="font-display text-3xl font-semibold text-charcoal-800">{`₦${product.price.toLocaleString("en-NG")}`}</span>
               {product.originalPrice && (
                 <>
-                  <span className="font-body text-lg text-charcoal-700/40 line-through">₦{product.originalPrice.toLocaleString("en-NG")}</span>
+                  <span className="font-body text-lg text-charcoal-700/40 line-through">{`₦${product.originalPrice.toLocaleString("en-NG")}`}</span>
                   <span className="bg-blush-100 text-blush-600 font-body text-sm font-medium px-2 py-0.5">Save {discount}%</span>
                 </>
               )}
